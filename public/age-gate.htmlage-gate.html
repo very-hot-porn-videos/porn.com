@@ -1,1 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE VAULT | Identity Verification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #996515;
+            --black: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
 
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--black);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+
+        /* The "Golden Mist" Background Effect */
+        .ambient-light {
+            position: absolute; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, rgba(0,0,0,0) 80%);
+            z-index: 1;
+        }
+
+        .entrance-vault {
+            position: relative; z-index: 10;
+            width: 100%; max-width: 480px;
+            padding: 50px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        .brand-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .brand-sub {
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .age-warning {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            color: #ccc;
+        }
+
+        .age-warning b { color: #fff; }
+
+        .btn-group {
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .btn-enter {
+            background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+            color: #000;
+            padding: 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-enter:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            background: #fff;
+        }
+
+        .btn-exit {
+            color: #444;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-exit:hover { color: #888; }
+
+        .legal-disclaimer {
+            margin-top: 40px;
+            font-size: 0.65rem;
+            color: #333;
+            line-height: 1.5;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+
+    <div class="entrance-vault">
+        <div class="brand-logo">Vault</div>
+        <div class="brand-sub">Exclusive Cinema Access</div>
+        
+        <div class="age-warning">
+            This site contains <b>highly explicit content</b>.<br>
+            By entering, you certify that you are at least <b>18 years of age</b> and consent to viewing adult material.
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-enter" onclick="confirmAge()">Accept & Enter</button>
+            <a href="https://google.com" class="btn-exit">I am under 18 - Leave</a>
+        </div>
+
+        <div class="legal-disclaimer">
+            &copy; 2026 The Vault. 18 U.S.C. 2257 Record Keeping Compliance.<br>
+            All individuals depicted were 18+ at the time of creation.<br>
+            Discreet billing used on all transactions.
+        </div>
+    </div>
+
+    <script>
+        function confirmAge() {
+            // Save the verification in the browser for this session
+            sessionStorage.setItem('vault_verified', 'true');
+            // Move to the main gallery
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
