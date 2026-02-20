@@ -1,23 +1,90 @@
-// This script checks if the user has paid before showing the XNXX video
-const urlParams = new URLSearchParams(window.location.search);
-const videoId = urlParams.get('video');
-const transactionId = urlParams.get('tid'); // The 'Token' from the payment gateway
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VIP THEATER | The Vault</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        body { background: #000; color: #ffd700; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        #player-wrapper { max-width: 1000px; margin: 50px auto; border: 2px solid #333; border-radius: 15px; overflow: hidden; box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); }
+        .success-banner { background: linear-gradient(90deg, #b8860b, #ffd700); color: #000; padding: 10px; font-weight: bold; text-transform: uppercase; }
+        .loading-shimmer { height: 500px; background: #111; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
 
-if (transactionId) {
-    // 1. Fetch the XNXX ID from your catalog.json based on videoId
-    fetch('./src/database/catalog.json')
-        .then(response => response.json())
-        .then(data => {
-            const video = data.find(v => v.id === videoId);
-            
-            // 2. Load the XNXX Embed only if transaction exists
-            document.getElementById('player').innerHTML = `
-                <div class="vip-status">PAYMENT VERIFIED: ACCESS GRANTED</div>
-                <iframe src="https://www.xnxx.com/embedframe/${video.xnxx_id}" 
-                        width="100%" height="500px" frameborder="0" allowfullscreen></iframe>
-            `;
-        });
-} else {
-    // 3. Kick them back to the payment page if no token
-    window.location.href = "index.html?error=not_paid";
-}
+    <div id="player-wrapper">
+        <div id="status-bar" class="success-banner">Verifying Digital Signature...</div>
+        
+        <div id="video-container">
+            <div class="loading-shimmer">
+                <p>Establishing Secure Connection to XNXX Servers...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * THE VAULT: POST-PAYMENT UNLOCKER
+         */
+        const Theater = {
+            init: async function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const videoId = urlParams.get('vid');
+                const token = urlParams.get('tid'); // The Transaction ID
+
+                if (!videoId || !token) {
+                    this.denyAccess("No Payment Token Detected.");
+                    return;
+                }
+
+                // Load the database to find the secret XNXX ID
+                try {
+                    const response = await fetch('../src/database/catalog.json');
+                    const catalog = await response.json();
+                    const video = catalog.find(v => v.id === videoId);
+
+                    if (video) {
+                        this.launchVideo(video.xnxx_id, video.title);
+                    } else {
+                        this.denyAccess("Video not found in Vault.");
+                    }
+                } catch (e) {
+                    this.denyAccess("System Error. Contact Support.");
+                }
+            },
+
+            launchVideo: function(xnxxId, title) {
+                const container = document.getElementById('video-container');
+                const statusBar = document.getElementById('status-bar');
+
+                // Creative Reveal: Update status and inject the Iframe
+                statusBar.innerText = `NOW PLAYING: ${title} (PREMIUM ACCESS)`;
+                
+                container.innerHTML = `
+                    <iframe 
+                        src="https://www.xnxx.com/embedframe/${xnxxId}" 
+                        width="100%" 
+                        height="550px" 
+                        frameborder="0" 
+                        allowfullscreen="true" 
+                        scrolling="no">
+                    </iframe>
+                `;
+            },
+
+            denyAccess: function(reason) {
+                document.getElementById('video-container').innerHTML = `
+                    <div style="padding: 100px; color: red;">
+                        <h2>ACCESS DENIED</h2>
+                        <p>${reason}</p>
+                        <a href="index.html" style="color: gold;">Return to Gallery & Purchase</a>
+                    </div>
+                `;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => Theater.init());
+    </script>
+</body>
+</html>
