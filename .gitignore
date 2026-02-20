@@ -1,1 +1,7 @@
-
+# .gitignore
+.env
+node_modules/
+*.mp4
+*.jpg
+*.png
+/legal/private_ids/
