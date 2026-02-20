@@ -1,72 +1,89 @@
 /**
- * THE VAULT ENGINE v1.0
- * Pure JavaScript - Optimized for GitHub Pages & XNXX Integration
+ * THE VAULT ENGINE v2.0 - 2026 EDITION
+ * Purpose: Handle 1000s of XNXX catalog items and manage the "Money Flow."
  */
 
 const Vault = {
     catalog: [],
-    
-    // 1. Initialize and Load Thousands of Videos
+    selectedVideoId: null,
+
+    // 1. Initialize the Engine
     init: async function() {
+        console.log("Vault Engine Starting...");
         try {
-            const response = await fetch('../src/database/catalog.json');
+            // Fetch the secret catalog JSON you created with your local builder
+            const response = await fetch('src/database/catalog.json');
+            if (!response.ok) throw new Error("Catalog not found");
+            
             this.catalog = await response.json();
             this.renderGallery(this.catalog);
-            console.log("Vault loaded: " + this.catalog.length + " videos ready.");
         } catch (err) {
-            console.error("Vault Error: Database not found.");
+            console.error("Critical Vault Error:", err);
+            document.getElementById('vault-grid').innerHTML = 
+                `<p style="color:red">Connection to Secure Database Failed. Refreshing...</p>`;
         }
     },
 
-    // 2. Build the Premium Netflix-style Grid
-    renderGallery: function(data) {
+    // 2. High-Performance Gallery Renderer
+    renderGallery: function(items) {
         const grid = document.getElementById('vault-grid');
-        grid.innerHTML = data.map(video => `
-            <div class="video-card" onclick="Vault.showPreview('${video.id}')">
-                <div class="thumb-container">
-                    <img src="${video.thumbnail}" class="blurred-image" alt="Premium Content">
-                    <div class="overlay-lock">
+        
+        // Use document fragment for faster rendering of 1000s of items
+        const html = items.map(video => `
+            <div class="video-card" onclick="Vault.openPurchaseModal('${video.id}')">
+                <div class="thumb-wrap">
+                    <img src="${video.thumbnail}" loading="lazy" alt="VIP Access">
+                    <div class="lock-overlay">
                         <span class="lock-icon">🔒</span>
-                        <span class="unlock-text">UNLOCK FOR $${video.price}</span>
                     </div>
                 </div>
-                <div class="video-info">
+                <div class="video-meta">
                     <h3>${video.title}</h3>
-                    <span class="badge">4K ULTRA HD</span>
+                    <div class="price-badge">$${video.price.toFixed(2)} - UNLOCK NOW</div>
                 </div>
             </div>
         `).join('');
-    },
-
-    // 3. The "Tease" Modal - Shows before they pay
-    showPreview: function(id) {
-        const video = this.catalog.find(v => v.id === id);
         
-        // This is a creative 'teaser' popup
-        const modal = document.createElement('div');
-        modal.className = 'vault-modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
-                <img src="${video.thumbnail}" style="width:100%; border-radius:10px;">
-                <h2>Unlock Full Access</h2>
-                <p>You are about to purchase: <strong>${video.title}</strong></p>
-                <div class="payment-buttons">
-                    <button class="pay-cc" onclick="Vault.pay('${video.id}', 'cc')">Pay with Credit Card</button>
-                    <button class="pay-crypto" onclick="Vault.pay('${video.id}', 'crypto')">Pay with Crypto</button>
-                </div>
-                <p class="discreet-hint">Safe & Discreet Billing Guaranteed.</p>
-            </div>
-        `;
-        document.body.appendChild(modal);
+        grid.innerHTML = html;
     },
 
-    // 4. Send them to the Money Flow
-    pay: function(id, method) {
-        // Redirect logic to your CCBill / Crypto Gateway
-        window.location.href = `https://your-payment-gateway.com/pay?vid=${id}&method=${method}`;
+    // 3. Open the "Money Flow" Gate
+    openPurchaseModal: function(id) {
+        const video = this.catalog.find(v => v.id === id);
+        if (!video) return;
+
+        this.selectedVideoId = id;
+        document.getElementById('modalTitle').innerText = video.title;
+        document.getElementById('buyModal').style.display = 'flex';
+        
+        // Subtle haptic feedback feel
+        console.log(`User intent captured: Buying ${id}`);
+    },
+
+    // 4. Trigger the Payment Gateway (CCBill / Crypto)
+    initiatePayment: function(method) {
+        const video = this.catalog.find(v => v.id === this.selectedVideoId);
+        
+        // Creative "Loading" State
+        const btn = event.target;
+        btn.innerText = "Securing Connection...";
+        btn.disabled = true;
+
+        // CONSTRUCTION OF THE PAYMENT LINK
+        // Replace 'YOUR_CCBILL_URL' with your real checkout link
+        const baseGateway = method === 'cc' 
+            ? 'https://bill.ccbill.com/jpost/signup.cgi?clientAccNo=XXXXXX&clientSubAccNo=XXXX' 
+            : '/api/crypto-pay';
+
+        // Attach the Video ID so the redirect knows what to play
+        const finalUrl = `${baseGateway}&vid=${video.id}&price=${video.price}`;
+
+        // Redirect to the Money Flow
+        setTimeout(() => {
+            window.location.href = finalUrl;
+        }, 800);
     }
 };
 
-// Start the Vault when page loads
+// Start the Vault immediately
 document.addEventListener('DOMContentLoaded', () => Vault.init());
