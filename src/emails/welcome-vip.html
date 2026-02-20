@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Helvetica', sans-serif; background-color: #0a0a0a; color: #ffffff; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 20px auto; background-color: #141414; border: 1px solid #333; border-radius: 8px; overflow: hidden; }
+        .header { padding: 30px; text-align: center; border-bottom: 1px solid #333; }
+        .content { padding: 40px; line-height: 1.6; }
+        .btn { display: inline-block; padding: 15px 30px; background-color: #e50914; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .footer { padding: 20px; text-align: center; font-size: 12px; color: #666; background-color: #000; }
+        .receipt-box { background: #222; padding: 15px; border-radius: 4px; margin: 20px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="color: #e50914; margin: 0;">THE VAULT</h1>
+        </div>
+        <div class="content">
+            <h2>Access Granted.</h2>
+            <p>Welcome to the inner circle. Your payment for <strong>{{video_title}}</strong> was successful. Your 48-hour viewing window has officially started.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{access_link}}" class="btn">WATCH NOW</a>
+            </div>
+
+            <div class="receipt-box">
+                TRANS_ID: {{transaction_id}}<br>
+                BILLING: {{billing_descriptor}}<br>
+                EXPIRES: {{expiry_date}}
+            </div>
+
+            <p style="font-size: 14px;"><em>Tip: To keep your viewing private, this charge will appear as "<strong>{{billing_descriptor}}</strong>" on your bank statement.</em></p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 The Vault Media Group. Must be 18+ to access.<br>
+            <a href="{{support_url}}" style="color: #999;">Need Help? Contact Support</a></p>
+        </div>
+    </div>
+</body>
+</html>
