@@ -1,1 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP CATALOG | The Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        /* Extra Gallery-specific UI polish */
+        header {
+            background: rgba(5, 5, 5, 0.95);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
 
+        .logo-small {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            color: #D4AF37;
+            text-decoration: none;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .category-bar {
+            padding: 20px 5%;
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .cat-tag {
+            background: #111;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #888;
+            cursor: pointer;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+
+        .cat-tag:hover, .cat-tag.active {
+            border-color: #D4AF37;
+            color: #D4AF37;
+        }
+
+        #vault-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 0 5% 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-small">THE VAULT</a>
+        <div id="status" style="font-size: 0.7rem; color: #555;">CONNECTED TO XNXX_CLOUD v4.0</div>
+    </header>
+
+    <div class="category-bar">
+        <div class="cat-tag active">ALL SCENES</div>
+        <div class="cat-tag">PREMIUM</div>
+        <div class="cat-tag">AMATEUR</div>
+        <div class="cat-tag">POV</div>
+        <div class="cat-tag">LATEST</div>
+    </div>
+
+    <main>
+        <div id="vault-grid">
+            <div style="padding: 100px; text-align: center; color: #333; grid-column: 1/-1;">
+                LOADING ENCRYPTED DATABASE...
+            </div>
+        </div>
+    </main>
+
+    <div id="buyModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Unlock Scene</h2>
+            <p style="color: #666; font-size: 0.9rem;">Gain instant 48-hour VIP access to this specific video. Secure & Discreet billing.</p>
+            
+            <button class="pay-btn btn-cc" onclick="Vault.initiatePayment('cc')">CREDIT CARD / DEBIT</button>
+            <button class="pay-btn btn-crypto" onclick="Vault.initiatePayment('crypto')">CRYPTO / BTC</button>
+            
+            <button onclick="closeModal()" style="background:none; border:none; color:#444; cursor:pointer; margin-top:15px; text-decoration: underline;">Cancel</button>
+        </div>
+    </div>
+
+    <script src="assets/vault.js"></script>
+    <script>
+        // 1. SECURITY: Prevent direct access without verification
+        if (sessionStorage.getItem('vault_verified') !== 'true') {
+            window.location.href = 'index.html';
+        }
+
+        // 2. MODAL TOGGLE
+        function closeModal() {
+            document.getElementById('buyModal').style.display = 'none';
+        }
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            let modal = document.getElementById('buyModal');
+            if (event.target == modal) modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
