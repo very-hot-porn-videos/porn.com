@@ -1,0 +1,156 @@
+/* THE VAULT - HIGH-END VIP STYLING */
+
+:root {
+    --gold: #D4AF37;
+    --gold-glow: rgba(212, 175, 55, 0.4);
+    --dark-bg: #050505;
+    --card-bg: #111;
+    --glass: rgba(255, 255, 255, 0.03);
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* --- HEADER & NAVIGATION --- */
+header {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #222;
+    padding: 20px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-small {
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px var(--gold-glow);
+}
+
+/* --- VIDEO GRID --- */
+#vault-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px 5%;
+}
+
+/* --- THE PREVIEW CARD (THE "HOOK") --- */
+.video-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid #222;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.video-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--gold);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.thumb-wrap {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: #000;
+}
+
+.thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* The "Blurred Tease" - video looks locked but visible */
+    filter: blur(5px) brightness(0.5); 
+    transition: 0.5s ease;
+}
+
+.video-card:hover img {
+    filter: blur(0px) brightness(1);
+}
+
+.lock-overlay {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: var(--gold);
+    text-shadow: 0 0 15px var(--gold);
+    transition: 0.3s;
+}
+
+.video-card:hover .lock-overlay {
+    opacity: 0;
+}
+
+.video-meta {
+    padding: 15px;
+    text-align: left;
+}
+
+.video-meta h3 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.price-badge {
+    display: inline-block;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+/* --- PAYMENT MODAL --- */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #0f0f0f;
+    border: 1px solid var(--gold);
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 50px var(--gold-glow);
+}
+
+.pay-btn {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn-cc { background: var(--gold); color: #000; }
+.btn-cc:hover { background: #fff; transform: scale(1.02); }
+
+.btn-crypto { background: #222; color: #fff; }
+.btn-crypto:hover { background: #333; }
