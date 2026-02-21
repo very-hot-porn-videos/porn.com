@@ -1,55 +1,57 @@
 /**
- * THE VAULT ENGINE v3.0 - 2026 HIGH-VELOCITY EDITION
- * Optimized for Root Directory Structure & XNXX Integration
+ * THE VAULT ENGINE v3.1 - 2026 
+ * Optimized for GitHub Pages Root Structure
  */
 
 const Vault = {
     catalog: [],
-    filteredCatalog: [],
     selectedVideoId: null,
 
-    // 1. Boot the Engine
     init: async function() {
-        console.log("Vault: Establishing Secure Handshake...");
+        console.log("Vault: Initializing Database Fetch...");
+        const grid = document.getElementById('vault-grid');
+
         try {
-            // Updated Path: Directly looks into the database folder from root
+            // Path Check: database/catalog.json (No leading slash for GitHub Pages)
             const response = await fetch('database/catalog.json');
-            if (!response.ok) throw new Error("Database offline or path incorrect");
             
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status} - Database file not found.`);
+            }
+
             this.catalog = await response.json();
-            this.filteredCatalog = this.catalog; // Initial state
+            console.log("Vault: Database Loaded Successfully", this.catalog);
             
-            this.renderGallery(this.filteredCatalog);
-            this.setupListeners();
+            this.renderGallery(this.catalog);
+            this.setupCategoryFilters();
+
         } catch (err) {
             console.error("Vault Critical Error:", err);
-            document.getElementById('vault-grid').innerHTML = `
-                <div style="color:var(--gold); padding:100px; text-align:center;">
-                    <p>OFFLINE: SECURE DATABASE NOT FOUND</p>
-                    <small style="color:#333;">Check: /database/catalog.json location</small>
+            grid.innerHTML = `
+                <div style="padding: 100px; text-align: center; color: #D4AF37; grid-column: 1/-1;">
+                    <p>⚠️ VAULT OFFLINE</p>
+                    <p style="font-size: 0.8rem; color: #555;">Reason: ${err.message}</p>
+                    <small style="color: #333;">Check: database/catalog.json exists in root.</small>
                 </div>`;
         }
     },
 
-    // 2. High-Performance Grid Rendering
     renderGallery: function(data) {
         const grid = document.getElementById('vault-grid');
         
-        if (data.length === 0) {
-            grid.innerHTML = `<p style="color:#444; grid-column:1/-1; text-align:center;">No scenes match your criteria.</p>`;
+        if (!data || data.length === 0) {
+            grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #444;">Vault is currently empty.</p>`;
             return;
         }
 
         grid.innerHTML = data.map(v => `
             <div class="video-card" onclick="Vault.openModal('${v.id}')">
                 <div class="thumb-wrap">
-                    <img src="${v.thumbnail}" loading="lazy" alt="VIP Preview">
-                    <div class="lock-overlay">
-                        <span class="lock-icon">🔒</span>
-                    </div>
+                    <img src="${v.thumbnail}" loading="lazy" onerror="this.src='https://placehold.co/600x400/111/D4AF37?text=Preview+Locked'">
+                    <div class="lock-overlay"><span class="lock-icon">🔒</span></div>
                 </div>
                 <div class="video-meta">
-                    <span class="category-tag">${v.category || 'PREMIUM'}</span>
+                    <span style="font-size: 10px; color: #D4AF37; letter-spacing: 1px;">${v.category || 'VIP'}</span>
                     <h3>${v.title}</h3>
                     <div class="price-badge">$${v.price.toFixed(2)} - UNLOCK</div>
                 </div>
@@ -57,50 +59,39 @@ const Vault = {
         `).join('');
     },
 
-    // 3. The "Money Flow" Gate
     openModal: function(id) {
         this.selectedVideoId = id;
         const video = this.catalog.find(v => v.id === id);
-        
-        if (!video) return;
-
-        const modal = document.getElementById('buyModal');
-        document.getElementById('modalTitle').innerText = video.title;
-        modal.style.display = 'flex';
+        if(video) {
+            document.getElementById('modalTitle').innerText = video.title;
+            document.getElementById('buyModal').style.display = 'flex';
+        }
     },
 
-    // 4. Payment Gateway Logic
     initiatePayment: function(method) {
-        const video = this.catalog.find(v => v.id === this.selectedVideoId);
-        
-        // This is where you put your real CCBill or Crypto Link
-        // We use SUCCESS_TOKEN for testing. Replace with your actual gateway URL.
-        const gatewayURL = `play.html?vid=${video.id}&tid=TX_${Math.random().toString(36).substr(2, 9)}`;
-        
         const btn = event.target;
-        btn.innerText = "REDIRECTING TO SECURE PAY...";
-        btn.style.opacity = "0.5";
-
+        btn.innerText = "REDIRECTING...";
+        
+        // Simulation for testing: Generates a random Transaction ID
+        const fakeTid = 'TX' + Math.floor(Math.random() * 999999);
+        
         setTimeout(() => {
-            window.location.href = gatewayURL;
-        }, 800);
+            window.location.href = `play.html?vid=${this.selectedVideoId}&tid=${fakeTid}`;
+        }, 1000);
     },
 
-    // 5. Filtering Logic (For the Category Bar)
-    setupListeners: function() {
+    setupCategoryFilters: function() {
         const tags = document.querySelectorAll('.cat-tag');
         tags.forEach(tag => {
-            tag.addEventListener('click', (e) => {
-                // UI Toggle
+            tag.addEventListener('click', () => {
                 tags.forEach(t => t.classList.remove('active'));
                 tag.classList.add('active');
-
-                // Filter Logic
-                const filter = tag.innerText.toUpperCase();
-                if (filter === 'ALL SCENES') {
+                
+                const category = tag.innerText.trim();
+                if (category === "ALL SCENES") {
                     this.renderGallery(this.catalog);
                 } else {
-                    const filtered = this.catalog.filter(v => v.category.toUpperCase() === filter);
+                    const filtered = this.catalog.filter(v => v.category === category);
                     this.renderGallery(filtered);
                 }
             });
@@ -108,5 +99,4 @@ const Vault = {
     }
 };
 
-// Start the Engine
 document.addEventListener('DOMContentLoaded', () => Vault.init());
