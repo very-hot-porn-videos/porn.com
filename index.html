@@ -3,169 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE VAULT | Premium 4K Catalog</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>THE VAULT | Access Verification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
     <style>
-        :root {
-            --gold: #D4AF37;
-            --bg: #050505;
-            --card-bg: #111;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        /* Premium Header */
-        header {
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #222;
-        }
-
-        .logo { font-weight: 900; font-size: 1.5rem; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; }
-
-        /* The Infinite Video Grid */
-        .container {
-            padding: 40px 5%;
-        }
-
-        #vault-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        /* Video Card Styling */
-        .video-card {
-            background: var(--card-bg);
-            border-radius: 12px;
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #050505;
+            display: flex; justify-content: center; align-items: center;
             overflow: hidden;
-            transition: transform 0.3s ease, border 0.3s ease;
-            cursor: pointer;
-            border: 1px solid #222;
-            position: relative;
         }
 
-        .video-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--gold);
+        .hero-bg {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            z-index: 1;
         }
 
-        .thumb-wrap {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            background: #000;
-        }
-
-        .thumb-wrap img {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover;
-            filter: blur(4px) brightness(0.7); /* The "Tease" effect */
-            transition: 0.5s;
-        }
-
-        .video-card:hover img {
-            filter: blur(0px) brightness(1);
-        }
-
-        .lock-overlay {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+        .gate-container {
+            position: relative; z-index: 10;
             text-align: center;
-            z-index: 2;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+            animation: fadeIn 1.5s ease-out;
         }
 
-        .lock-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .video-meta {
-            padding: 15px;
-            background: linear-gradient(to top, #111, transparent);
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: #D4AF37;
+            margin: 0;
+            letter-spacing: 12px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
-        .video-meta h3 { margin: 0; font-size: 1rem; color: #fff; }
-        .price-badge { 
-            display: inline-block; 
-            margin-top: 10px; 
-            color: var(--gold); 
-            font-weight: bold; 
-            font-size: 0.9rem;
+        .sub-brand {
+            font-family: 'Inter', sans-serif;
+            color: #666;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 40px;
         }
 
-        /* The Modal Popup */
-        .modal {
-            display: none; position: fixed; z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            justify-content: center; align-items: center;
+        .warning-box {
+            color: #ccc;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
         }
 
-        .modal-content {
-            background: #111; padding: 30px; border-radius: 20px;
-            max-width: 400px; width: 90%; text-align: center;
-            border: 1px solid var(--gold);
+        .warning-box b { color: #fff; }
+
+        .enter-btn {
+            background: linear-gradient(135deg, #D4AF37 0%, #996515 100%);
+            color: #000;
+            border: none;
+            padding: 20px 60px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        .pay-btn {
-            display: block; width: 100%; padding: 15px;
-            margin: 10px 0; border-radius: 8px; border: none;
-            font-weight: bold; cursor: pointer; text-transform: uppercase;
+        .enter-btn:hover {
+            transform: scale(1.05);
+            background: #fff;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
         }
 
-        .btn-cc { background: var(--gold); color: #000; }
-        .btn-crypto { background: #333; color: #fff; }
+        .exit-link {
+            display: block;
+            margin-top: 25px;
+            color: #444;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
 
+        .exit-link:hover { color: #888; }
+
+        .footer-compliance {
+            margin-top: 40px;
+            font-size: 0.6rem;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">The Vault</div>
-        <div id="user-status" style="font-size: 0.8rem; color: #666;">PREMIUM NETWORK ONLINE</div>
-    </header>
+    <div class="hero-bg"></div>
 
-    <div class="container">
-        <h2 style="margin-bottom: 30px; letter-spacing: 1px;">Featured Exclusives</h2>
-        <div id="vault-grid">
-            <div style="color: #444;">Accessing secure database...</div>
+    <div class="gate-container">
+        <h1>VAULT</h1>
+        <div class="sub-brand">Premium 4K Collection</div>
+        
+        <div class="warning-box">
+            This portal contains <b>Explicit Adult Content</b>.<br>
+            By entering, you confirm you are <b>18+ years of age</b> and agree to our discreet billing terms.
+        </div>
+
+        <button class="enter-btn" onclick="grantAccess()">Enter The Vault</button>
+        
+        <a href="https://google.com" class="exit-link">I am under 18 - Exit</a>
+
+        <div class="footer-compliance">
+            18 U.S.C. 2257 Record Keeping Compliance<br>
+            © 2026 Vault Media Group • Private & Secure
         </div>
     </div>
 
-    <div id="buyModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modalTitle">Unlock Video</h2>
-            <p style="color: #888;">Complete payment to gain 48-hour VIP access to this scene.</p>
-            <button class="pay-btn btn-cc" onclick="Vault.initiatePayment('cc')">Credit Card / Debit</button>
-            <button class="pay-btn btn-crypto" onclick="Vault.initiatePayment('crypto')">Bitcoin / Crypto</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#555; cursor:pointer; margin-top:10px;">Cancel</button>
-        </div>
-    </div>
-
-    <script src="assets/vault.js"></script>
     <script>
-        // Security: If not verified at age-gate, kick them back
-        if (sessionStorage.getItem('vault_verified') !== 'true') {
-            window.location.href = 'age-gate.html';
-        }
-
-        function closeModal() {
-            document.getElementById('buyModal').style.display = 'none';
+        function grantAccess() {
+            // High-end transition: fade out before redirect
+            document.querySelector('.gate-container').style.opacity = '0';
+            document.querySelector('.gate-container').style.transition = '0.5s';
+            
+            sessionStorage.setItem('vault_verified', 'true');
+            
+            setTimeout(() => {
+                window.location.href = 'gallery.html';
+            }, 500);
         }
     </script>
 </body>
