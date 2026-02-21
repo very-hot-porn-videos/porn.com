@@ -154,3 +154,15 @@ header {
 
 .btn-crypto { background: #222; color: #fff; }
 .btn-crypto:hover { background: #333; }
+#status::before {
+    content: "●";
+    color: #00ff00; /* Neon Green */
+    margin-right: 5px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
